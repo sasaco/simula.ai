@@ -3,6 +3,9 @@ import { NextPage } from "next";
 import { useEffect } from "react";
 import * as THREE from "three";
 
+import createBox from './BoxComponent'; // 新しいコンポーネントをインポート
+
+
 const Three: NextPage = () => {
   let canvas: HTMLElement;
 
@@ -40,14 +43,8 @@ const Three: NextPage = () => {
     renderer.setSize(sizes.width, sizes.height);
     renderer.setPixelRatio(window.devicePixelRatio);
 
-    // ボックスジオメトリー
-    const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
-    const boxMaterial = new THREE.MeshLambertMaterial({
-      color: "#2497f0",
-    });
-    const box = new THREE.Mesh(boxGeometry, boxMaterial);
-    box.position.z = -5;
-    box.rotation.set(10, 10, 10);
+    // ボックスの作成とシーンへの追加
+    const box = createBox(); // 新しいコンポーネント関数を呼び出し
     scene.add(box);
 
     // ライト
