@@ -43,9 +43,12 @@ const Three: NextPage = () => {
     renderer.setSize(sizes.width, sizes.height);
     renderer.setPixelRatio(window.devicePixelRatio);
 
-    // ボックスの作成とシーンへの追加
-    const box = createBox(); // 新しいコンポーネント関数を呼び出し
-    scene.add(box);
+    // 非同期関数を呼び出してボックスを作成し、シーンに追加
+    const init = async () => {
+      const box = await createBox();
+      scene.add(box);
+    };
+    init();
 
     // ライト
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
@@ -54,7 +57,7 @@ const Three: NextPage = () => {
     pointLight.position.set(1, 2, 3);
     scene.add(pointLight);
 
-    // アニメーション
+    /*/ アニメーション
     const clock = new THREE.Clock();
     const tick = () => {
       const elapsedTime = clock.getElapsedTime();
@@ -64,6 +67,7 @@ const Three: NextPage = () => {
       renderer.render(scene, camera);
     };
     tick();
+    */
 
     // ブラウザのリサイズ処理
     window.addEventListener("resize", () => {

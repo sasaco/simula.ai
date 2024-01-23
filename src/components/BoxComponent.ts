@@ -1,6 +1,12 @@
 import * as THREE from 'three';
 
-const createBox = () => {
+// createBox関数が非同期処理を行うように変更
+const createBox = async () => {
+  // 非同期処理を想定したコード
+  // 例: 外部リソースからテクスチャを取得するなど
+  // const texture = await loadTexture('path/to/texture');
+
+
   // ボックスジオメトリー
   const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
   // メッシュのマテリアルを黄色に変更
