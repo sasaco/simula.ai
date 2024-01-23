@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 // createBox関数が非同期処理を行うように変更
-const createBox = async () => {
+const createBox = () => {
   // 非同期処理を想定したコード
   // 例: 外部リソースからテクスチャを取得するなど
   // const texture = await loadTexture('path/to/texture');
