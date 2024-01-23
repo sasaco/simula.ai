@@ -2,12 +2,16 @@
 import { NextPage } from "next";
 import { useEffect } from "react";
 import * as THREE from "three";
+import { useScene } from './SceneContext'; // useSceneフックをインポート
+
 
 import createBox from './BoxComponent'; // 新しいコンポーネントをインポート
 
 
 const Three: NextPage = () => {
   let canvas: HTMLElement;
+  const scene = useScene(); // コンテキストからsceneを取得
+
 
   useEffect(() => {
 
@@ -16,9 +20,6 @@ const Three: NextPage = () => {
     // canvasを取得
     // eslint-disable-next-line react-hooks/exhaustive-deps
     canvas = document.getElementById("canvas")!;
-
-    // シーン
-    const scene = new THREE.Scene();
 
     // サイズ
     const sizes = {
@@ -64,7 +65,7 @@ const Three: NextPage = () => {
       renderer.render(scene, camera);
     };
     tick();
-    
+
 
     // ブラウザのリサイズ処理
     window.addEventListener("resize", () => {
@@ -75,7 +76,7 @@ const Three: NextPage = () => {
       renderer.setSize(sizes.width, sizes.height);
       renderer.setPixelRatio(window.devicePixelRatio);
     });
-  }, []);
+  }, [scene]);
 
   return (
     <>

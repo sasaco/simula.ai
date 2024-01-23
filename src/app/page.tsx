@@ -1,9 +1,10 @@
+import { SceneProvider } from '../components/SceneContext';
 import Three from '../components/three';
 
 export default function Home() {
   return (
-    <main>
+    <SceneProvider>
       <Three/>
-    </main>
+    </SceneProvider>
   );
 }
