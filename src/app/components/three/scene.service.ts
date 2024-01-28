@@ -1,122 +1,78 @@
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
-import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
-//import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+// import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SceneService {
-  // シーン
-  private scene: THREE.Scene;
-
-  // レンダラー
-  private renderer = new THREE.WebGLRenderer();
-
-  // カメラ
-  private camera: THREE.PerspectiveCamera | THREE.OrthographicCamera = new THREE.OrthographicCamera();
-  private aspectRatio: number = 0;
-  private Width: number = 0;;
-  private Height: number = 0;;
+  private scene!: THREE.Scene;
+  private camera!: THREE.PerspectiveCamera | THREE.OrthographicCamera;
+  private renderer!: THREE.WebGLRenderer;
 
   // カメラの動きを制御するコントロール
   //private controls: OrbitControls | undefined;
 
-  constructor() {
-    THREE.Object3D.DEFAULT_UP.set(0, 0, 1);
-    // シーンを作成
-    this.scene = new THREE.Scene();
-    // シーンの背景を白に設定
-    this.scene.background = new THREE.Color(0xffffff);
-    // レンダラーをバインド
-    this.render = this.render.bind(this);
-  }
-
   public OnInit(canvasElement: HTMLCanvasElement): void {
 
-    // レンダラー
-    this.createRender(canvasElement);
+    this.camera = new THREE.OrthographicCamera();
+    this.camera.position.z = 1;
+
+    this.scene = new THREE.Scene(); // シーンを作成
+    this.scene.background = new THREE.Color(0x000000);  // シーンの背景を黒に設定
+    //this.scene.background = new THREE.Color(0xffffff);  // シーンの背景を白に設定
 
     // 環境光源
     this.add(new THREE.AmbientLight(0xf0f0f0));
 
     // コントロール
-    this.addControls();
+    // this.controls = new OrbitControls(
+    //   this.camera,
+    // );
+    // this.controls.addEventListener("change", this.render);
 
-    // 立方体のジオメトリとマテリアルを作成
-    const geometry = new THREE.BoxGeometry(10, 10, 10);
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    // 立方体のメッシュを作成
-    const cube = new THREE.Mesh(geometry, material);
-    // シーンに立方体を追加
-    this.scene.add(cube);
-  }
-
-  // レンダリングのサイズを取得する
-  public getBoundingClientRect(): DOMRect {
-    return this.renderer.domElement.getBoundingClientRect();
-  }
-
-  // レンダラーを初期化する
-  private createRender(
-    canvasElement: HTMLCanvasElement
-  ): void {
-
-    this.renderer = new THREE.WebGLRenderer({
-      preserveDrawingBuffer: true,
-      canvas: canvasElement,
-      alpha: true, // transparent background
-      antialias: true, // smooth edges
-    });
-    this.renderer.shadowMap.enabled = true;
-
-    this.onResize(canvasElement);
+    // レンダラー
+    this.onResize(canvasElement); // this.renderer=nullの状態で
+    this.renderer = new THREE.WebGLRenderer( { canvas: canvasElement } );
 
   }
 
   // レンダリングする
   public render() {
-    if (this.renderer == null) return;
     this.renderer.render(this.scene, this.camera);
   }
 
   // リサイズ
   public onResize(canvasElement: HTMLCanvasElement): void {
 
-    this.Width = canvasElement.clientWidth;
-    this.Height = canvasElement.clientHeight;
-    this.aspectRatio = this.Width / this.Height;
+    const Width = canvasElement.clientWidth;
+    const Height = canvasElement.clientHeight;
+    const aspectRatio = Width / Height;
 
-    if ("aspect" in this.camera) {
-      this.camera["aspect"] = this.aspectRatio;
-    }
-    if ("left" in this.camera) {
-      this.camera["left"] = -this.Width / 2;
-    }
-    if ("right" in this.camera) {
-      this.camera["right"] = this.Width / 2;
-    }
-    if ("top" in this.camera) {
-      this.camera["top"] = this.Height / 2;
-    }
-    if ("bottom" in this.camera) {
-      this.camera["bottom"] = -this.Height / 2;
-    }
+    if ("aspect" in this.camera)
+      this.camera["aspect"] = aspectRatio;
+
+    if ("left" in this.camera)
+      this.camera["left"] = -Width / 2;
+
+    if ("right" in this.camera)
+      this.camera["right"] = Width / 2;
+
+    if ("top" in this.camera)
+      this.camera["top"] = Height / 2;
+
+    if ("bottom" in this.camera)
+      this.camera["bottom"] = -Height / 2;
 
     this.camera.updateProjectionMatrix();
-    this.renderer.setSize(this.Width, this.Height);
-    this.renderer.setPixelRatio(this.aspectRatio);
+
+    if (this.renderer == null) return;
+    this.renderer.setSize(Width, Height);
+    this.renderer.setPixelRatio(aspectRatio);
     this.render();
   }
 
-  // コントロール
-  private addControls() {
-    // this.controls = new OrbitControls(
-    //   this.camera,
-    // );
-    // this.controls.addEventListener("change", this.render);
-
-  }
 
   // シーンにオブジェクトを追加する
   public add(...threeObject: THREE.Object3D[]): void {
