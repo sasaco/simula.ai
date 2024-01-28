@@ -19,21 +19,16 @@ export class ThreeComponent implements AfterViewInit {
   ) { }
 
   ngAfterViewInit() {
-    this.scene.OnInit(
-      this.canvas,
-      this.canvas.clientWidth,
-      this.canvas.clientHeight
-    );
+
+    this.scene.OnInit(this.canvas);
 
     // レンダリングする
-    this.scene.render();
-    // this.animate();
+    this.animate();
   }
 
   private get canvas(): HTMLCanvasElement {
     return this.canvasRef.nativeElement;
   }
-  /*
   private animate(): void {
     // We have to run this outside angular zones,
     // because it could trigger heavy changeDetection cycles.
@@ -44,6 +39,7 @@ export class ThreeComponent implements AfterViewInit {
     });
   }
 
+  /*
   // マウスクリック時のイベント
   @HostListener("pointerdown", ["$event"])
   public onMouseDown(event: MouseEvent) {
@@ -67,14 +63,11 @@ export class ThreeComponent implements AfterViewInit {
     mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
     return mouse;
   }
-
+*/
   // ウインドウがリサイズした時のイベント処理
   @HostListener("window:resize", ["$event"])
   public onResize(event: Event) {
-    this.scene.onResize(
-      this.canvas.clientWidth,
-      this.canvas.clientHeight
-    );
+    this.scene.onResize(this.canvas);
   }
-  */
+
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+//import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,6 @@ export class SceneService {
 
   // レンダラー
   private renderer = new THREE.WebGLRenderer();
-  private labelRenderer = new CSS2DRenderer();
 
   // カメラ
   private camera: THREE.PerspectiveCamera | THREE.OrthographicCamera = new THREE.OrthographicCamera();
@@ -21,7 +20,7 @@ export class SceneService {
   private Height: number = 0;;
 
   // カメラの動きを制御するコントロール
-  private controls: OrbitControls | undefined;
+  //private controls: OrbitControls | undefined;
 
   constructor() {
     THREE.Object3D.DEFAULT_UP.set(0, 0, 1);
@@ -30,21 +29,13 @@ export class SceneService {
     // シーンの背景を白に設定
     this.scene.background = new THREE.Color(0xffffff);
     // レンダラーをバインド
-    // this.render = this.render.bind(this);
+    this.render = this.render.bind(this);
   }
 
-  public OnInit(
-    canvasElement: HTMLCanvasElement,
-    width: number,
-    height: number
-  ): void {
-
-    // カメラ
-    this.Width = width;
-    this.Height = height;
+  public OnInit(canvasElement: HTMLCanvasElement): void {
 
     // レンダラー
-    this.createRender(canvasElement, this.Width, this.Height);
+    this.createRender(canvasElement);
 
     // 環境光源
     this.add(new THREE.AmbientLight(0xf0f0f0));
@@ -68,10 +59,9 @@ export class SceneService {
 
   // レンダラーを初期化する
   private createRender(
-    canvasElement: HTMLCanvasElement,
-    Width: number,
-    Height: number
+    canvasElement: HTMLCanvasElement
   ): void {
+
     this.renderer = new THREE.WebGLRenderer({
       preserveDrawingBuffer: true,
       canvas: canvasElement,
@@ -80,58 +70,51 @@ export class SceneService {
     });
     this.renderer.shadowMap.enabled = true;
 
-    this.labelRenderer = new CSS2DRenderer();
-    this.labelRenderer.domElement.style.position = "absolute";
-
-    this.onResize(this.Width, this.Height);
+    this.onResize(canvasElement);
 
   }
 
   // レンダリングする
   public render() {
-    if (this.renderer === null) return;
+    if (this.renderer == null) return;
     this.renderer.render(this.scene, this.camera);
-    this.labelRenderer.render(this.scene, this.camera);
   }
 
   // リサイズ
-  public onResize(Width: number, Height: number): void {
+  public onResize(canvasElement: HTMLCanvasElement): void {
 
-    const aspectRatio: number = Width / Height;
+    this.Width = canvasElement.clientWidth;
+    this.Height = canvasElement.clientHeight;
+    this.aspectRatio = this.Width / this.Height;
 
     if ("aspect" in this.camera) {
-      this.camera["aspect"] = aspectRatio;
+      this.camera["aspect"] = this.aspectRatio;
     }
     if ("left" in this.camera) {
-      this.camera["left"] = -Width / 2;
+      this.camera["left"] = -this.Width / 2;
     }
     if ("right" in this.camera) {
-      this.camera["right"] = Width / 2;
+      this.camera["right"] = this.Width / 2;
     }
     if ("top" in this.camera) {
-      this.camera["top"] = Height / 2;
+      this.camera["top"] = this.Height / 2;
     }
     if ("bottom" in this.camera) {
-      this.camera["bottom"] = -Height / 2;
+      this.camera["bottom"] = -this.Height / 2;
     }
 
-    this.aspectRatio = Width / Height;
-
     this.camera.updateProjectionMatrix();
-    this.renderer.setSize(Width, Height);
+    this.renderer.setSize(this.Width, this.Height);
     this.renderer.setPixelRatio(this.aspectRatio);
-    this.labelRenderer.setSize(Width, Height);
     this.render();
   }
 
   // コントロール
-  public addControls() {
-    if (this.labelRenderer == null) return;
-    this.controls = new OrbitControls(
-      this.camera,
-      this.labelRenderer.domElement
-    );
-    this.controls.addEventListener("change", this.render);
+  private addControls() {
+    // this.controls = new OrbitControls(
+    //   this.camera,
+    // );
+    // this.controls.addEventListener("change", this.render);
 
   }
 
