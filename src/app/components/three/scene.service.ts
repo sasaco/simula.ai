@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,9 @@ export class SceneService {
   private Width: number = 0;;
   private Height: number = 0;;
 
+  // カメラの動きを制御するコントロール
+  private controls: OrbitControls | undefined;
+
   constructor() {
     THREE.Object3D.DEFAULT_UP.set(0, 0, 1);
     // シーンを作成
@@ -26,29 +30,35 @@ export class SceneService {
     // シーンの背景を白に設定
     this.scene.background = new THREE.Color(0xffffff);
     // レンダラーをバインド
-    this.render = this.render.bind(this);
+    // this.render = this.render.bind(this);
   }
 
   public OnInit(
-    aspectRatio: number,
     canvasElement: HTMLCanvasElement,
-    deviceRatio: number,
     width: number,
     height: number
   ): void {
 
     // カメラ
-    this.aspectRatio = aspectRatio;
     this.Width = width;
     this.Height = height;
-    this.onResize(this.aspectRatio, this.Width, this.Height);
+
+    // レンダラー
+    this.createRender(canvasElement, this.Width, this.Height);
 
     // 環境光源
     this.add(new THREE.AmbientLight(0xf0f0f0));
 
-    // レンダラー
-    this.createRender(canvasElement, this.aspectRatio, this.Width, this.Height);
+    // コントロール
+    this.addControls();
 
+    // 立方体のジオメトリとマテリアルを作成
+    const geometry = new THREE.BoxGeometry(10, 10, 10);
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    // 立方体のメッシュを作成
+    const cube = new THREE.Mesh(geometry, material);
+    // シーンに立方体を追加
+    this.scene.add(cube);
   }
 
   // レンダリングのサイズを取得する
@@ -59,7 +69,6 @@ export class SceneService {
   // レンダラーを初期化する
   private createRender(
     canvasElement: HTMLCanvasElement,
-    deviceRatio: number,
     Width: number,
     Height: number
   ): void {
@@ -69,14 +78,13 @@ export class SceneService {
       alpha: true, // transparent background
       antialias: true, // smooth edges
     });
-    this.renderer.setPixelRatio(deviceRatio);
-    this.renderer.setSize(Width, Height);
     this.renderer.shadowMap.enabled = true;
-    // this.renderer.setClearColorHex( 0x000000, 1 );
 
     this.labelRenderer = new CSS2DRenderer();
-    this.labelRenderer.setSize(Width, Height);
     this.labelRenderer.domElement.style.position = "absolute";
+
+    this.onResize(this.Width, this.Height);
+
   }
 
   // レンダリングする
@@ -87,9 +95,12 @@ export class SceneService {
   }
 
   // リサイズ
-  public onResize(deviceRatio: number, Width: number, Height: number): void {
+  public onResize(Width: number, Height: number): void {
+
+    const aspectRatio: number = Width / Height;
+
     if ("aspect" in this.camera) {
-      this.camera["aspect"] = deviceRatio;
+      this.camera["aspect"] = aspectRatio;
     }
     if ("left" in this.camera) {
       this.camera["left"] = -Width / 2;
@@ -104,10 +115,24 @@ export class SceneService {
       this.camera["bottom"] = -Height / 2;
     }
 
+    this.aspectRatio = Width / Height;
+
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(Width, Height);
+    this.renderer.setPixelRatio(this.aspectRatio);
     this.labelRenderer.setSize(Width, Height);
     this.render();
+  }
+
+  // コントロール
+  public addControls() {
+    if (this.labelRenderer == null) return;
+    this.controls = new OrbitControls(
+      this.camera,
+      this.labelRenderer.domElement
+    );
+    this.controls.addEventListener("change", this.render);
+
   }
 
   // シーンにオブジェクトを追加する

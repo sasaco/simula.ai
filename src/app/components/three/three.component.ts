@@ -20,28 +20,20 @@ export class ThreeComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.scene.OnInit(
-      this.getAspectRatio(),
       this.canvas,
-      devicePixelRatio,
       this.canvas.clientWidth,
       this.canvas.clientHeight
     );
 
     // レンダリングする
-    this.animate();
+    this.scene.render();
+    // this.animate();
   }
 
   private get canvas(): HTMLCanvasElement {
     return this.canvasRef.nativeElement;
   }
-
-  private getAspectRatio(): number {
-    if (this.canvas.clientHeight === 0) {
-      return 0;
-    }
-    return this.canvas.clientWidth / this.canvas.clientHeight;
-  }
-
+  /*
   private animate(): void {
     // We have to run this outside angular zones,
     // because it could trigger heavy changeDetection cycles.
@@ -80,10 +72,9 @@ export class ThreeComponent implements AfterViewInit {
   @HostListener("window:resize", ["$event"])
   public onResize(event: Event) {
     this.scene.onResize(
-      this.getAspectRatio(),
-      window.innerWidth,
-      window.innerHeight
+      this.canvas.clientWidth,
+      this.canvas.clientHeight
     );
   }
-
+  */
 }
