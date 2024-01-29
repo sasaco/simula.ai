@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import * as THREE from 'three';
 // import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
-// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 @Injectable({
   providedIn: 'root'
@@ -10,37 +11,37 @@ export class SceneService {
   private scene!: THREE.Scene;
   private camera!: THREE.PerspectiveCamera | THREE.OrthographicCamera;
   private renderer!: THREE.WebGLRenderer;
+  private controls!: OrbitControls; // カメラの動きを制御するコントロール
 
-  // カメラの動きを制御するコントロール
-  //private controls: OrbitControls | undefined;
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
   public OnInit(canvasElement: HTMLCanvasElement): void {
 
-    this.camera = new THREE.OrthographicCamera();
-    this.camera.position.z = 1;
+    if (isPlatformBrowser(this.platformId)) {
+      this.camera = new THREE.OrthographicCamera();
 
-    this.scene = new THREE.Scene(); // シーンを作成
-    this.scene.background = new THREE.Color(0x000000);  // シーンの背景を黒に設定
-    //this.scene.background = new THREE.Color(0xffffff);  // シーンの背景を白に設定
+      this.scene = new THREE.Scene(); // シーンを作成
+      this.scene.background = new THREE.Color(0x000000);  // シーンの背景を黒に設定
 
-    // 環境光源
-    this.add(new THREE.AmbientLight(0xf0f0f0));
+      // 環境光源
+      this.add(new THREE.AmbientLight(0xf0f0f0));
 
-    // コントロール
-    // this.controls = new OrbitControls(
-    //   this.camera,
-    // );
-    // this.controls.addEventListener("change", this.render);
-
-    // レンダラー
-    this.onResize(canvasElement); // this.renderer=nullの状態で
-    this.renderer = new THREE.WebGLRenderer( { canvas: canvasElement } );
+      // ブラウザ環境でのみレンダラーを初期化
+      this.renderer = new THREE.WebGLRenderer( { canvas: canvasElement } );
+      this.onResize(canvasElement);
+      // コントロール
+      this.controls = new OrbitControls(this.camera, canvasElement);
+      this.controls.addEventListener("change", this.render);
+    }
 
   }
 
   // レンダリングする
   public render() {
-    this.renderer.render(this.scene, this.camera);
+    if (isPlatformBrowser(this.platformId)) {
+      if (this.renderer == null) return;
+      this.renderer.render(this.scene, this.camera);
+    }
   }
 
   // リサイズ

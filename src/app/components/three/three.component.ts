@@ -1,5 +1,4 @@
-import { isPlatformBrowser } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, HostListener, Inject, NgZone, PLATFORM_ID, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import * as THREE from 'three';
 import { SceneService } from './scene.service';
 
@@ -18,33 +17,19 @@ export class ThreeComponent implements AfterViewInit {
   }
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private ngZone: NgZone,
-    private scene: SceneService) {}
+    public scene: SceneService) {}
 
   ngAfterViewInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.scene.OnInit(this.canvas);
+    this.scene.OnInit(this.canvas);
 
-      const geometry = new THREE.BoxGeometry(10, 10, 10);
-      const material = new THREE.MeshNormalMaterial();
-      const box = new THREE.Mesh(geometry, material);
-      this.scene.add(box);
+    const geometry = new THREE.BoxGeometry(10, 10, 10);
+    const material = new THREE.MeshNormalMaterial();
+    const box = new THREE.Mesh(geometry, material);
+    this.scene.add(box);
 
-      this.render();
-    }
+    this.scene.render();
   }
 
-  // レンダリングする
-  private render(): void {
-    // We have to run this outside angular zones,
-    // because it could trigger heavy changeDetection cycles.
-    this.ngZone.runOutsideAngular(() => {
-      window.addEventListener("DOMContentLoaded", () => {
-        this.scene.render();
-      });
-    });
-  }
 
   // マウスクリック時のイベント
   @HostListener("pointerdown", ["$event"])
