@@ -1,0 +1,88 @@
+"use client";
+import { NextPage } from "next";
+import { useEffect } from "react";
+import * as THREE from "three";
+import { useScene } from './SceneContext'; // useSceneフックをインポート
+
+
+import createBox from './BoxComponent'; // 新しいコンポーネントをインポート
+
+
+const Three: NextPage = () => {
+  let canvas: HTMLElement;
+  const scene = useScene(); // コンテキストからsceneを取得
+
+
+  useEffect(() => {
+
+    if (canvas) return;
+
+    // canvasを取得
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    canvas = document.getElementById("canvas")!;
+
+    // サイズ
+    const sizes = {
+      width: innerWidth,
+      height: innerHeight,
+    };
+
+    // カメラ
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      sizes.width / sizes.height,
+      0.1,
+      1000
+    );
+
+    // レンダラー
+    const renderer = new THREE.WebGLRenderer({
+      canvas: canvas || undefined,
+      antialias: true,
+      alpha: true,
+    });
+    renderer.setSize(sizes.width, sizes.height);
+    renderer.setPixelRatio(window.devicePixelRatio);
+
+    // 非同期関数を呼び出してボックスを作成し、シーンに追加
+    const box = createBox();
+    scene.add(box);
+
+    // ライト
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    scene.add(ambientLight);
+    const pointLight = new THREE.PointLight(0xffffff, 0.2);
+    pointLight.position.set(1, 2, 3);
+    scene.add(pointLight);
+
+    // アニメーション
+    const clock = new THREE.Clock();
+    const tick = () => {
+      const elapsedTime = clock.getElapsedTime();
+      box.rotation.x = elapsedTime;
+      box.rotation.y = elapsedTime;
+      window.requestAnimationFrame(tick);
+      renderer.render(scene, camera);
+    };
+    tick();
+
+
+    // ブラウザのリサイズ処理
+    window.addEventListener("resize", () => {
+      sizes.width = window.innerWidth;
+      sizes.height = window.innerHeight;
+      camera.aspect = sizes.width / sizes.height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(sizes.width, sizes.height);
+      renderer.setPixelRatio(window.devicePixelRatio);
+    });
+  }, [scene]);
+
+  return (
+    <>
+      <canvas id="canvas"></canvas>
+    </>
+  );
+};
+
+export default Three;
