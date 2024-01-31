@@ -11,8 +11,12 @@ const ThreeCanvas: NextPage = () => {
   let canvas: HTMLElement;
   const scene = useScene(); // コンテキストからsceneを取得
 
-
+  // useEffectとは、関数の実行タイミングをReactのレンダリング後まで遅らせる
   useEffect(() => {
+
+    async function init() {
+      await AddCube(scene);
+    }
 
     if (canvas) return;
 
@@ -44,7 +48,7 @@ const ThreeCanvas: NextPage = () => {
     renderer.setPixelRatio(window.devicePixelRatio);
 
     // 非同期関数を呼び出してボックスを作成し、シーンに追加
-    const box = AddCube(scene);
+    // AddCube(scene);
 
     // ライト
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
@@ -62,7 +66,6 @@ const ThreeCanvas: NextPage = () => {
     };
     tick();
 
-
     // ブラウザのリサイズ処理
     window.addEventListener("resize", () => {
       sizes.width = window.innerWidth;
@@ -73,7 +76,7 @@ const ThreeCanvas: NextPage = () => {
       renderer.setPixelRatio(window.devicePixelRatio);
     });
 
-
+    init();
 
   }, [scene]);
 
