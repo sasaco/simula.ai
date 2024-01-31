@@ -1,10 +1,10 @@
 import { SceneProvider } from '../components/SceneContext';
-import Three from '../components/three';
+import ThreeCanvas from '../components/ThreeCanvas';
 
 export default function Home() {
   return (
     <SceneProvider>
-      <Three/>
+      <ThreeCanvas/>
     </SceneProvider>
   );
 }
