@@ -4,16 +4,19 @@ import { useEffect } from "react";
 import * as THREE from "three";
 import { useScene } from './SceneContext'; // useSceneフックをインポート
 
+import AddCube, { rotateBox } from "./scene";
 
-import createBox from './BoxComponent'; // 新しいコンポーネントをインポート
 
-
-const Three: NextPage = () => {
+const ThreeCanvas: NextPage = () => {
   let canvas: HTMLElement;
   const scene = useScene(); // コンテキストからsceneを取得
 
-
+  // useEffectとは、関数の実行タイミングをReactのレンダリング後まで遅らせる
   useEffect(() => {
+
+    async function init() {
+      await AddCube(scene);
+    }
 
     if (canvas) return;
 
@@ -45,8 +48,7 @@ const Three: NextPage = () => {
     renderer.setPixelRatio(window.devicePixelRatio);
 
     // 非同期関数を呼び出してボックスを作成し、シーンに追加
-    const box = createBox();
-    scene.add(box);
+    // AddCube(scene);
 
     // ライト
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
@@ -58,14 +60,11 @@ const Three: NextPage = () => {
     // アニメーション
     const clock = new THREE.Clock();
     const tick = () => {
-      const elapsedTime = clock.getElapsedTime();
-      box.rotation.x = elapsedTime;
-      box.rotation.y = elapsedTime;
+      rotateBox(clock.getElapsedTime());
       window.requestAnimationFrame(tick);
       renderer.render(scene, camera);
     };
     tick();
-
 
     // ブラウザのリサイズ処理
     window.addEventListener("resize", () => {
@@ -76,6 +75,9 @@ const Three: NextPage = () => {
       renderer.setSize(sizes.width, sizes.height);
       renderer.setPixelRatio(window.devicePixelRatio);
     });
+
+    init();
+
   }, [scene]);
 
   return (
@@ -85,4 +87,4 @@ const Three: NextPage = () => {
   );
 };
 
-export default Three;
+export default ThreeCanvas;
