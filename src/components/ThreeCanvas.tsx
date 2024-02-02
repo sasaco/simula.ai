@@ -4,7 +4,8 @@ import { useEffect } from "react";
 import * as THREE from "three";
 import { useScene } from './SceneContext'; // useSceneフックをインポート
 
-import AddCube, { rotateBox } from "./scene";
+import AddCube, { rotateBox, renderer, setCamera, setRenderer, setOrbitControls, controls, render } from "./scene";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 
 const ThreeCanvas: NextPage = () => {
@@ -16,7 +17,13 @@ const ThreeCanvas: NextPage = () => {
 
     async function init() {
       await AddCube(scene);
+      render();
     }
+
+    function render() {
+      renderer.render(scene, camera);
+    }
+
 
     if (canvas) return;
 
@@ -31,6 +38,9 @@ const ThreeCanvas: NextPage = () => {
     };
 
     // カメラ
+    /*
+    setCamera(sizes.width, sizes.height);
+    */
     const camera = new THREE.PerspectiveCamera(
       75,
       sizes.width / sizes.height,
@@ -39,6 +49,9 @@ const ThreeCanvas: NextPage = () => {
     );
 
     // レンダラー
+    /*
+    setRenderer(canvas, sizes.width, sizes.height);
+    */
     const renderer = new THREE.WebGLRenderer({
       canvas: canvas || undefined,
       antialias: true,
@@ -46,6 +59,15 @@ const ThreeCanvas: NextPage = () => {
     });
     renderer.setSize(sizes.width, sizes.height);
     renderer.setPixelRatio(window.devicePixelRatio);
+
+    /*
+    setOrbitControls(scene);
+    */
+    const controls = new OrbitControls(
+      camera,
+      renderer.domElement
+    );
+    controls.addEventListener("change", render);
 
     // 非同期関数を呼び出してボックスを作成し、シーンに追加
     // AddCube(scene);
@@ -58,14 +80,16 @@ const ThreeCanvas: NextPage = () => {
     scene.add(pointLight);
 
     // アニメーション
+    
     const clock = new THREE.Clock();
     const tick = () => {
       rotateBox(clock.getElapsedTime());
       window.requestAnimationFrame(tick);
       renderer.render(scene, camera);
     };
-    tick();
-
+    //tick();
+    render();
+    
     // ブラウザのリサイズ処理
     window.addEventListener("resize", () => {
       sizes.width = window.innerWidth;
@@ -75,7 +99,7 @@ const ThreeCanvas: NextPage = () => {
       renderer.setSize(sizes.width, sizes.height);
       renderer.setPixelRatio(window.devicePixelRatio);
     });
-
+    
     init();
 
   }, [scene]);
