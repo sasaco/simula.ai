@@ -2,7 +2,7 @@
 import { NextPage } from "next";
 import { useEffect } from "react";
 import * as THREE from "three";
-import { useScene } from './SceneContext'; // useSceneフックをインポート
+import { useScene } from './SceneProvider'; // useSceneフックをインポート
 
 import AddCube, { rotateBox, renderer, setCamera, setRenderer, setOrbitControls, controls, render } from "./scene";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";

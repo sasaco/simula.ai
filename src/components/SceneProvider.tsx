@@ -6,7 +6,7 @@ import * as THREE from 'three';
 export const SceneContext = createContext<THREE.Scene | null>(null);
 
 // SceneContextを使用するためのカスタムフック
-export const useScene = () => {
+export function useScene(): THREE.Scene {
   const scene = useContext(SceneContext);
   if (!scene) {
     throw new Error('useScene must be used within a SceneProvider');
@@ -16,8 +16,9 @@ export const useScene = () => {
 
 
 // SceneContextのProviderコンポーネント
-export const SceneProvider = ({ children }: { children: React.ReactNode }) => {
+export function SceneProvider({ children }: { children: React.ReactNode })
+{
   const scene = new THREE.Scene(); // Sceneインスタンスを作成
   // Providerを通じてsceneを渡す
   return <SceneContext.Provider value={scene}>{children}</SceneContext.Provider>;
-};
+}
