@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Viewer React Sample
 
-## Getting Started
+![platforms](https://img.shields.io/badge/platform-windows%20%7C%20osx%20%7C%20linux-lightgray.svg)
+[![node.js](https://img.shields.io/badge/Node.js-16.17-blue.svg)](https://nodejs.org)
+[![npm](https://img.shields.io/badge/npm-8.15-blue.svg)](https://www.npmjs.com/)
+[![license](https://img.shields.io/:license-mit-green.svg)](https://opensource.org/licenses/MIT)
 
-First, run the development server:
+> This code sample is referenced by the following blog post: https://aps.autodesk.com/blog/building-simple-react-wrapper-viewer
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Simple React application (bootstrapped using [Create React App](https://github.com/facebook/create-react-app)) with the viewer embedded into it using a custom wrapper component.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+![thumbnail](thumbnail.png)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Development
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Prerequisites
 
-## Learn More
+- [Node.js](https://nodejs.org)
+- Terminal (for example, [Windows Command Prompt](https://en.wikipedia.org/wiki/Cmd.exe) or [macOS Terminal](https://support.apple.com/guide/terminal/welcome/mac))
+- To keep things simple, this application does not use any server code - you'll need to hard-code an access token and a model URN directly into the client-side code
+    - If you don't know how to get these values, try the following:
+        - Go to https://aps-universal-test-app.autodesk.io/api/token and copy the value of the `access_token` property
+        - Go to https://aps-universal-test-app.autodesk.io/api/models and copy the `urn` of one of the models
 
-To learn more about Next.js, take a look at the following resources:
+### Running
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Clone this repository, and navigate to the repo folder in terminal
+- Install dependencies: `npm install`
+- Go to _src/index.jsx_, and update the `APS_ACCESS_TOKEN` and `APS_MODEL_URN` constants with your access token and model URN
+- Run `npm start` to open the application in development mode
+    - The app should automatically open in your browser (if not, navigate to [http://localhost:3000](http://localhost:3000))
+    - When you make any changes to the code, the page will automatically reload
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Troubleshooting
 
-## Deploy on Vercel
+Please contact us via https://aps.autodesk.com/en/support/get-help.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+This sample is licensed under the terms of the [MIT License](http://opensource.org/licenses/MIT). Please see the [LICENSE](LICENSE) file for more details.
