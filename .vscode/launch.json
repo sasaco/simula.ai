@@ -7,8 +7,8 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Debug with Chrome",
-            "url": "http://localhost:3000",
+            "name": "localhost に対して Chrome を起動する",
+            "url": "http://localhost:5173",
             "webRoot": "${workspaceFolder}"
         },
         {

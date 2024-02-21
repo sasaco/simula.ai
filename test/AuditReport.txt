@@ -1,2 +1,0 @@
-34351 objects audited
-Total errors found during audit 0, fixed 0

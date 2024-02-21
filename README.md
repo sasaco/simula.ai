@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<p align="center">
+  <a href="https://thatopen.com/">TOC</a>
+  |
+  <a href="https://docs.thatopen.com/intro">documentation</a>
+  |
+  <a href="https://platform.thatopen.com/app">demo</a>
+  |
+  <a href="https://people.thatopen.com/">community</a>
+  |
+  <a href="https://www.npmjs.com/package/openbim-app-templates">npm package</a>
+</p>
 
-## Getting Started
+![cover](cover.png)
 
-First, run the development server:
+<h1>Open BIM app templates <img src="https://ifcjs.github.io/components/resources/favicon.ico" width="32"></h1>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+[![NPM Package][npm]][npm-url]
+[![NPM Package][npm-downloads]][npm-url]
+[![Tests](https://github.com/IFCjs/components/actions/workflows/tests.yml/badge.svg)](https://github.com/IFCjs/components/actions/workflows/tests.yaml)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This repository is a CLI command that allow to quickly start your next BIM application using [OpenBIM Components](https://github.com/IFCjs/components) and [Vite](https://vitejs.dev/).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Usage
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Starting is really easy, just follow these steps:
 
-## Learn More
+* Install it globally with `npm i -g openbim-app-templates`.
+* Create a folder anywhere you want and open it within your IDE.
+* In the terminal of the opened folder, run `create-openbim-app` and follow the prompts.
+* Run `npm i` and then `npm run dev`
+* Go to the localhost provided by Vite and enjoy.
 
-To learn more about Next.js, take a look at the following resources:
+## Templates
+Currently, there are two templates available:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+* Vanilla
+* React
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Templates are using TypeScript as OpenBIM Components is written with it, so you can get typing help when developing your app. Keep in mind the templates are not full apps as they lack many of the functionalities from the library, but you can take them as a nice starting point to not going from the scratch.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+[npm]: https://img.shields.io/npm/v/openbim-app-templates
+[npm-url]: https://www.npmjs.com/package/openbim-app-templates
+[npm-downloads]: https://img.shields.io/npm/dw/openbim-app-templates
