@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './components/App';
 
 const APS_ACCESS_TOKEN = ''; // Specify your access token
-const APS_MODEL_URN = ''; // Specify your model URN
+const APS_MODEL_URN = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6ZWo3cTA3Y3BldDh1Y3FycmV3bGJybWJ3dWFqb3VucWktYmFzaWMtYXBwL3Rlc3QwMi5pZmM'; // Specify your model URN
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 if (!APS_ACCESS_TOKEN || !APS_MODEL_URN) {
