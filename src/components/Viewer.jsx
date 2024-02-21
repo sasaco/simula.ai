@@ -13,8 +13,12 @@ const runtime = {
 };
 
 /**
+ * ビューアランタイムの初期化
  * Initializes global runtime for communicating with Autodesk Platform Services.
  * Calling this function repeatedly with different options is not allowed, and will result in an exception.
+ * ビューアを使用できるようにするには、まずグローバル ビューア ランタイムを(Autodesk.Viewing.Initializer 関数を使用して)初期化し、
+ * ビューア(またはビューア)が通信するバックエンドのタイプと認証の詳細を指定する必要があります。
+ * バニラJavaScriptでは、通常、アプリケーションを次のようにラップします。
  * @async
  * @param {Autodesk.Viewing.InitializerOptions} options Runtime initialization options.
  * @returns {Promise<void>}
@@ -33,6 +37,10 @@ function initializeViewerRuntime(options) {
 
 /**
  * Wrapper for the Autodesk Platform Services viewer component.
+ * 基本コンポーネント
+ * まず、空の をレンダリングする単純な React コンポーネントクラスを定義し、
+ * コンポーネントが DOM にマウントされたときにこの要素への ref をキャプチャします。
+ * 後で、この要素内でビューアをインスタンス化し、その参照を というメンバー変数に格納します。<div><div>viewer
  */
 class Viewer extends React.Component {
     constructor(props) {
