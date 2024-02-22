@@ -24,3 +24,77 @@ body {
   width: 100%;
 }
 
+#imlogo {
+  position: absolute;
+  top: 10px;
+  left: 30px;
+  z-index: 5;
+  width: 200px;
+}
+
+.datablock {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  bottom: 100px;
+  left: 30px;
+  z-index: 5;
+}
+
+#lbmainlabel {
+  width: 200px;
+}
+
+#btconfig {
+  top: 5px;
+  width: 200px;
+}
+
+.handleSelectionExtensionIcon {
+  background-image: url(https://github.com/encharm/Font-Awesome-SVG-PNG/raw/master/white/png/24/object-group.png);
+  background-size: 24px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/*.adsk-viewing-viewer #toolbar-modelStructureTool {
+  display: none !important
+}
+
+.adsk-viewing-viewer #toolbar-explodeTool {
+  display: none !important
+}
+
+.adsk-viewing-viewer #toolbar-measurementSubmenuTool {
+  display: none !important
+}
+
+.adsk-viewing-viewer #toolbar-orbitTools {
+  display: none !important
+}
+
+.adsk-viewing-viewer #toolbar-panTool {
+  display: none !important
+}
+
+.adsk-viewing-viewer #toolbar-zoomTool {
+  display: none !important
+}
+
+.adsk-viewing-viewer #toolbar-bimWalkTool {
+  display: none !important
+}
+
+.adsk-viewing-viewer #toolbar-cameraSubmenuTool {
+  display: none !important
+}*/
+
+@media(max-width:500px){
+  .datablock {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    bottom: 200px;
+
+  }
+}
