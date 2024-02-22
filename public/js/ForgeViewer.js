@@ -13,11 +13,7 @@ function launchViewer(urn) {
     };
   
     Autodesk.Viewing.Initializer(options, () => {
-      viewer = new Autodesk.Viewing.GuiViewer3D(
-        document.getElementById('forgeViewer'), 
-        { 
-            extensions: ['Autodesk.DocumentBrowser','HandleSelectionExtension'] 
-      });
+      viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), { extensions: ['Autodesk.DocumentBrowser','HandleSelectionExtension'] });
       viewer.start();
       var documentId = 'urn:' + urn;
       Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
